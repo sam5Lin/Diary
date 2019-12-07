@@ -21,9 +21,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
-                android:textSize="17sp"
+                android:textSize="20sp"
                 android:drawableStart="@drawable/ic_title"
                 android:drawablePadding="15dp"
+                android:gravity="center|start"
                 />
 
             <TextView
@@ -34,6 +35,7 @@
                 android:textSize="17sp"
                 android:drawableStart="@drawable/ic_time"
                 android:drawablePadding="15dp"
+                android:gravity="center|start"
                 />
     </LinearLayout>
 

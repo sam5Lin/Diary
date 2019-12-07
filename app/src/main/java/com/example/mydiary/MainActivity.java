@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.mydiary.entity.Diary;
 import com.example.mydiary.entity.DiaryAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,10 +25,17 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private List<Diary> diaryList = new ArrayList<>();
+    private FloatingActionButton btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        btn = findViewById(R.id.addDiary);
+        btn.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this,AddDiaryActivity.class);
+            startActivity(intent);
+        });
 
         initTools();
 
