@@ -1,99 +1,75 @@
 package com.example.mydiary;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cursoradapter.widget.CursorAdapter;
-import androidx.cursoradapter.widget.SimpleCursorAdapter;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.NotificationManager;
-import android.content.ContentValues;
+
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.example.mydiary.entity.Diary;
 import com.example.mydiary.entity.DiaryAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private List<Diary> diaryList = new ArrayList<>();
+    private RecyclerView recyclerView;
     private FloatingActionButton btn;
-    private NotificationManager manager;
-    private MySQLiteOpenHelper helper;//数据库类
     private SQLiteDatabase database;//数据库
     private LinearLayout diary_empty;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);//实例化通知
-        helper = new MySQLiteOpenHelper(this);//实例化数据库
-        database = helper.getWritableDatabase();//获取一个可读写的数据库对象
+        MyApplication application = (MyApplication)this.getApplication();
+        database = application.getDatabase();
 
         diary_empty = findViewById(R.id.diary_empty);
+
+        recyclerView = (RecyclerView) findViewById(R.id.diary_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
 
 
         btn = findViewById(R.id.addDiary);
         btn.setOnClickListener(v->{
-            Intent intent = new Intent(MainActivity.this,AddDiaryActivity.class);
+            Intent intent = new Intent(this,AddDiaryActivity.class);
             startActivity(intent);
         });
 
         initTools();
-
         initDiarys();
-
-
     }
 
-    private void addDiary(Diary diary){
-        ContentValues values=new ContentValues();
-        values.put("title",diary.getTitle());
-        values.put("date",diary.getDate());
-        values.put("content",diary.getContent());
-        database.insert("diarys",null,values);
-    }
+
 
     private void deleteDiary(int position){
-
+        //database.delete("diarys","title=?",new String[]{"难过的一天"});
     }
 
     private void initDiarys() {
-
-        SimpleDateFormat simpleDateFormat =
-                new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-        //获取当前时间
-        Date date = new Date(System.currentTimeMillis());
-
-        Diary diary1 = new Diary("难过的一天",
-                simpleDateFormat.format(date),
-                "今天是个好日子，美丽的一天又要开始咯，我和同学们出去打球咯");
-
-        addDiary(diary1);
-
-
-
-        //database.delete("diarys","title=?",new String[]{"难过的一天"});
 
         Cursor cursor = database.query("diarys", null, null, null, null, null, "_id desc");//创建查询，返回结果集
         if(cursor.getCount() > 0){
@@ -106,10 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.diary_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        DiaryAdapter adapter = new DiaryAdapter(diaryList);
+
+        DiaryAdapter adapter = new DiaryAdapter(this, diaryList);
+
         recyclerView.setAdapter(adapter);
 
         if(adapter.getItemCount() > 0){

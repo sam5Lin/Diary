@@ -1,5 +1,8 @@
 package com.example.mydiary.entity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mydiary.AddDiaryActivity;
+import com.example.mydiary.MainActivity;
 import com.example.mydiary.R;
+import com.example.mydiary.ShowDiaryActivity;
 
 import java.util.List;
+
+
 
 
 
@@ -20,7 +28,7 @@ import java.util.List;
  */
 
 public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.ViewHolder> {
-
+    private Context context;
     private List<Diary> diaryList;
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView title;
@@ -34,7 +42,8 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.ViewHolder> 
 
     }
 
-    public DiaryAdapter(List<Diary> diaryList){
+    public DiaryAdapter(Context context, List<Diary> diaryList){
+        this.context = context;
         this.diaryList = diaryList;
     }
 
@@ -53,6 +62,15 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.ViewHolder> 
         Diary diary = diaryList.get(position);
         holder.title.setText(diary.getTitle());
         holder.time.setText(diary.getDate());
+
+        holder.itemView.setOnClickListener(v->{
+            Intent intent = new Intent(context, ShowDiaryActivity.class);
+            Bundle bundle = new Bundle();
+            String time = diary.getDate();
+            bundle.putCharSequence("time", time);
+            intent.putExtras(bundle);
+            context.startActivity(intent);
+        });
     }
 
 
