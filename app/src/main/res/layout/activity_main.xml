@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    >
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,8 +22,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="#00BCD4"
-                />
+                android:background="#00BCD4" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -30,17 +33,50 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="300dp"
             app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
-            app:srcCompat="@drawable/ic_add"
-            />
+            app:srcCompat="@drawable/ic_add" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/diary_list"
             android:layout_width="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
+    <LinearLayout
+        android:id="@+id/diary_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="100dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/coordinatorLayout"
+        app:layout_constraintVertical_bias="0.4">
+
+        <ImageView
+            android:id="@+id/img_fragment_Empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@mipmap/empty" />
+
+        <TextView
+            android:id="@+id/tv_fragment_Empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="还没有写日记哟。。。"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#585454"
+            android:textSize="33sp" />
+    </LinearLayout>
 
 
-</LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
