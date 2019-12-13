@@ -1,5 +1,6 @@
 package com.example.mydiary.entity;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mydiary.AddDiaryActivity;
 import com.example.mydiary.MainActivity;
+import com.example.mydiary.MyApplication;
 import com.example.mydiary.R;
 import com.example.mydiary.ShowDiaryActivity;
 
@@ -70,6 +72,8 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.ViewHolder> 
             bundle.putCharSequence("time", time);
             intent.putExtras(bundle);
             context.startActivity(intent);
+
+            context.stopService(MainActivity.getMusicIntent());
         });
     }
 

@@ -35,12 +35,22 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton btn;
     private SQLiteDatabase database;//数据库
     private LinearLayout diary_empty;
-
+    static private  Intent musicIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        // 启动服务播放背景音乐
+        musicIntent = new Intent(MainActivity.this, musicService.class);
+        String action = musicService.ACTION_MUSIC;
+        // 设置action
+        musicIntent.setAction(action);
+        startService(musicIntent);
+
+
 
         MyApplication application = (MyApplication)this.getApplication();
         database = application.getDatabase();
@@ -57,17 +67,27 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(v->{
             Intent intent = new Intent(this,AddDiaryActivity.class);
             startActivity(intent);
+
+            stopService(musicIntent);
         });
 
         initTools();
         initDiarys();
     }
 
-
-
-    private void deleteDiary(int position){
-        //database.delete("diarys","title=?",new String[]{"难过的一天"});
+    static public Intent getMusicIntent() {
+        return musicIntent;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (musicIntent != null){
+            // 对于intentService，这一步可能是多余的
+            stopService(musicIntent);
+        }
+    }
+
 
     private void initDiarys() {
 
@@ -105,38 +125,10 @@ public class MainActivity extends AppCompatActivity {
     private void initTools() {
         Toolbar mtoolbar=findViewById(R.id.toolbar);
 
-        //设置Toolbar菜单点击事件
-        mtoolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.one: {
-                        Toast.makeText(MainActivity.this, "我是1", Toast.LENGTH_SHORT).show();
-                        break;
-                    }
-                    case R.id.two: {
-                        Toast.makeText(MainActivity.this, "我是2", Toast.LENGTH_SHORT).show();
-
-                        break;
-                    }
-                    case R.id.three: {
-                        Toast.makeText(MainActivity.this, "我是3", Toast.LENGTH_SHORT).show();
-
-                        break;
-                    }
-                    default:break;
-                }
-                return true;
-            }
-        });
         setSupportActionBar(mtoolbar);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+
 
 
 }
